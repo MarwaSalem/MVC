@@ -4,11 +4,10 @@ import java.awt.event.*;
 public class View {
 	
 	private Frame mainFrame;
-	private Frame addCustomerFrame;
-	private Frame viewCustomerFrame;
-	private Frame viewAllCustomersFrame;
+	private Frame newCustomerFrame;
+	private Frame customerInfoFrame;
+	private Frame allCustomersInfoFrame;
 	private Panel controlPanel;
-	
     public View (){
     	viewMainFrame();
     }
@@ -47,6 +46,32 @@ public class View {
     	
     }
     
+    private void showAddNewCustomerWindow (){
+    	newCustomerFrame = new Frame();
+    	newCustomerFrame.setSize(600, 600);
+    	newCustomerFrame.setLayout(new GridLayout(5, 2));
+    	newCustomerFrame.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent windowEvent){
+               System.exit(0);
+            }        
+         }); 
+    	
+    	Label header = new Label("Please fill the following entries !", Label.LEFT);
+    	header.setFont(new Font("Serif", Font.BOLD, 16));
+    	newCustomerFrame.add(header);
+    	
+    	
+    	
+    }
+    
+    private void showGetCustomerInfoWindow (){
+    	
+    }
+    
+    private void  showViewAllCustomersWindow (){
+    	
+    }
+    
     private class ButtonClickListener implements ActionListener{
     	public void actionPerformed(ActionEvent e){
     		String command = e.getActionCommand();
@@ -59,6 +84,8 @@ public class View {
     		}
     	}    	
     }
+    
+    
     
     public static void main(String[] args) {
     	
