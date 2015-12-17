@@ -38,4 +38,8 @@ public class Customer {
 		return lastName;
 	}
 	
+	public String getCustomer(){
+		return id+";"+firstName+";"+lastName+";";
+	}
+	
 }
