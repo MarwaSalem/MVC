@@ -9,19 +9,20 @@ public class View {
 	private Frame allCustomersInfoFrame;
 	private Panel controlPanel;
 	private Panel entriesPanel;
+	private Button submitBtn;
+	private Button viewAllBtn;
 	private Button closeBtn;
-	private Controller controller;
+
 	
     public View (){
-    	viewMainFrame();
     	closeBtn = new Button("Close");
     	closeBtn.setActionCommand("Close");
     	closeBtn.addActionListener(new ButtonClickListener());
+    	submitBtn =  new Button("Submit");
+    	viewAllBtn = new Button("View all Customers");
+    	viewMainFrame();
     }
     
-    public void controllerCall(Controller controller){
-    	this.controller = controller;
-    }
     private void viewMainFrame(){
     	mainFrame = new Frame("MVC Example");
     	mainFrame.setSize(600,300);
@@ -39,14 +40,13 @@ public class View {
     	mainFrame.add(controlPanel);
     	Button addBtn = new Button("Add Customer");
     	Button getBtn = new Button("Get Customer Info");
-    	Button viewAllBtn = new Button("View all Customers");
     	
     	addBtn.setActionCommand("Add");
     	getBtn.setActionCommand("View");
     	viewAllBtn.setActionCommand("ViewAll");
     	addBtn.addActionListener(new ButtonClickListener());
     	getBtn.addActionListener(new ButtonClickListener());
-    	viewAllBtn.addActionListener(new ButtonClickListener());
+    	
     	
     	controlPanel.add(addBtn);
     	controlPanel.add(getBtn);
@@ -55,7 +55,7 @@ public class View {
     	
     }
     
-    private void showAddNewCustomerWindow (){
+    public void showAddNewCustomerWindow (){
     	newCustomerFrame = new Frame();
     	newCustomerFrame.setSize(600, 400);
     	newCustomerFrame.setLayout(new GridLayout(5, 2));
@@ -83,16 +83,14 @@ public class View {
     	entriesPanel.add(cFirstName);
     	entriesPanel.add(lastName);
     	entriesPanel.add(cLastName);
-    	Button submitBtn = new Button("Submit");
     	submitBtn.setBounds(newCustomerFrame.getWidth()/2-20, newCustomerFrame.getHeight()/2-10, 20, 10);
     	submitBtn.setActionCommand("Submit");
-    	submitBtn.addActionListener(new ButtonClickListener());
     	entriesPanel.add(submitBtn);
     	newCustomerFrame.setVisible(true);
     	  	
     }
     
-    private void showCustomerInfoWindow (String customer){
+    public void showCustomerInfoWindow (String customer){
     	String [] customerProperties = customer.split(";");
     	customerInfoFrame = new Frame(customerProperties[0]);
     	customerInfoFrame.setSize(600, 400);
@@ -125,14 +123,14 @@ public class View {
  
     }
     
-    private void  showAllCustomersWindow (String customers){
+    public void  showAllCustomersWindow (String customers){
     	allCustomersInfoFrame = new Frame();
     	allCustomersInfoFrame.setSize(800,600);
     	allCustomersInfoFrame.setLayout(new GridLayout(5, 2));
     	allCustomersInfoFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent windowEvent){
                allCustomersInfoFrame.setVisible(false);
-               newCustomerFrame.dispose();
+               allCustomersInfoFrame.dispose();
             }        
          }); 
     	
@@ -165,6 +163,48 @@ public class View {
     	
     }
     
+    public void showEmptyDBWindow(){
+    	
+    	allCustomersInfoFrame = new Frame();
+    	allCustomersInfoFrame.setSize(300,200);
+    	allCustomersInfoFrame.setLayout(new FlowLayout());
+    	allCustomersInfoFrame.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent windowEvent){
+               allCustomersInfoFrame.setVisible(false);
+               allCustomersInfoFrame.dispose();
+            }        
+         }); 
+    	Panel viewPanel = new Panel(new FlowLayout());
+    	allCustomersInfoFrame.add(viewPanel);
+    	Label title = new Label("DB is empty !!",Label.CENTER);
+    	title.setFont(new Font("Serif", Font.BOLD, 32));
+    	viewPanel.add(title);
+    	viewPanel.add(closeBtn);
+    	allCustomersInfoFrame.setVisible(true);
+    }
+       
+    public String getDataEntries(){
+    	Component [] components = entriesPanel.getComponents();
+		String properties="";
+		for (Component comp : components){
+			if (comp instanceof TextField){
+				properties += ((TextField) comp).getText()+";";
+			}
+		}
+		return properties;
+    }
+    
+    public void onSubmit(){
+    	newCustomerFrame.setVisible(false);
+    	newCustomerFrame.dispose();
+    }
+     
+
+    public void addActionObserver(ActionListener onClick){
+    	submitBtn.addActionListener(onClick);
+    	viewAllBtn.addActionListener(onClick);
+    }
+    
     private class ButtonClickListener implements ActionListener{
     	public void actionPerformed(ActionEvent e){
     		String command = e.getActionCommand();
@@ -174,33 +214,12 @@ public class View {
     		}else if(command.equals("View")) {
     			System.out.println("view Customer");  
     			//showCustomerInfoWindow(controller.getCustomerInfo(id));
-    		}else if(command.equals("ViewAll")){
-    			System.out.println("view all customers");
-    			 showAllCustomersWindow(controller.getAllCustomersInfo());
-    		}else if(command.equals("Submit")){
-    			System.out.println("Submit new Customer Data");
-    			Component [] components = entriesPanel.getComponents();
-    			String properties="";
-    			for (Component comp : components){
-    				if (comp instanceof TextField){
-    					properties += ((TextField) comp).getText()+";";
-    				}
-    			}
-    			System.out.println("CUSTOMER: " + properties);
-    			controller.addNewCustomer(properties);
-    			newCustomerFrame.setVisible(false);
-    		}else if(command.equals("Close")){
-    			
+    		}else  if(command.equals("Close")){
+    			Component comp = ((Component) e.getSource()).getParent().getParent();
+    			System.out.println(comp);
+    			comp.setVisible(false); 
     		}
     	}    	
     }
-    
-    
-    
-    public static void main(String[] args) {
-    	
-    	View theView = new View();
-	}
-	
-
+   
 }

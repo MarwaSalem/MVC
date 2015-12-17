@@ -1,3 +1,8 @@
+import java.awt.Component;
+import java.awt.TextField;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 
 public class Controller {
 	
@@ -7,7 +12,7 @@ public class Controller {
 	public Controller(Model model , View view){
 		this.model = model;
 		this.view = view;
-		this.view.controllerCall(this);
+		this.view.addActionObserver(new ButtonClickListener());
 	}
 	
 	 public void addNewCustomer(String customer){
@@ -23,5 +28,26 @@ public class Controller {
 	 public String getAllCustomersInfo (){
 		return model.getAllCustomers();
 	}
+	 
+	private class ButtonClickListener implements ActionListener{
+	    	public void actionPerformed(ActionEvent e){
+	    		String command = e.getActionCommand();
+	    		if(command.equals("ViewAll")){
+	    			System.out.println("view all customers");
+	    			 String customers = getAllCustomersInfo();
+	    			 if (customers.equals("")){
+	    				 // show no customers found in data base
+	    				 view.showEmptyDBWindow();
+	    			 }else{
+	    				 view.showAllCustomersWindow(customers);
+	    			 }
+	    		}else if(command.equals("Submit")){
+	    			String customer = view.getDataEntries();
+	    			addNewCustomer(customer);
+	    			System.out.println("Submit new Customer Data:" + customer);
+	    			view.onSubmit();
+	    		}
+	    	}    	
+	    }
 	 		
 }
