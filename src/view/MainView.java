@@ -1,8 +1,8 @@
 package view;
 
 import java.awt.*;
-import controller.*;
 import java.awt.event.*;
+import static helper.Constants.*;
 
 
 public class MainView {
@@ -10,9 +10,14 @@ public class MainView {
  	private Panel controlPanel;
  	private Button viewAllBtn;
  	
-	private void viewMainFrame(){
-    	mainFrame = new Frame("MVC Example");
-    	mainFrame.setSize(600,300);
+ 	public MainView() {
+ 		mainFrame = new Frame("MVC Example");
+ 		controlPanel = new Panel(new FlowLayout());
+ 		viewAllBtn = new Button("View all Customers");
+ 	}
+ 	
+	public void viewMainFrame(){
+    	mainFrame.setSize(MAIN_VIEW_WIDTH,MAIN_VIEW_HEIGHT);
     	mainFrame.setLayout(new GridLayout(2,3));
     	mainFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent windowEvent){
@@ -23,11 +28,9 @@ public class MainView {
     	mainFrame.add(header);
     	Font headerFont = new Font("Serif",Font.BOLD,32);
     	header.setFont(headerFont);
-    	controlPanel = new Panel(new FlowLayout());
     	mainFrame.add(controlPanel);
     	Button addBtn = new Button("Add Customer");
     	Button getBtn = new Button("Get Customer Info");
-    	viewAllBtn = new Button("View all Customers");
     	addBtn.setActionCommand("Add");
     	getBtn.setActionCommand("View");
     	viewAllBtn.setActionCommand("ViewAll");
@@ -58,9 +61,8 @@ public class MainView {
     	}    	
     }
 
-	public void addActionObserver(controller.CustomerController.ButtonClickListener buttonClickListener) {
-		// TODO Auto-generated method stub
-		
+	public void addActionObserver(ActionListener onClick) {
+		 viewAllBtn.addActionListener(onClick);
 	}
 	
 	

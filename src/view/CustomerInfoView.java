@@ -2,15 +2,21 @@ package view;
 
 import java.awt.*;
 import java.awt.event.*;
+import static helper.Constants.*;
 
 public class CustomerInfoView {
 	private Frame customerInfoFrame;
 	private Button closeBtn;
+	
+	public CustomerInfoView(){
+		customerInfoFrame = new Frame();
+		closeBtn = new Button("Close");
+	}
 
     public void showCustomerInfoWindow (String customer){
     	String [] customerProperties = customer.split(";");
-    	customerInfoFrame = new Frame(customerProperties[0]);
-    	customerInfoFrame.setSize(600, 400);
+    	customerInfoFrame.setTitle(customerProperties[0]);
+    	customerInfoFrame.setSize(CUSTOMER_INFO_VIEW_WIDTH, CUSTOMER_INFO_VIEW_HEIGHT);
     	customerInfoFrame.setLayout(new GridLayout(5, 2));
     	customerInfoFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent windowEvent){
@@ -29,7 +35,6 @@ public class CustomerInfoView {
     	cFirstName.setEditable(false);
     	cLastName.setEditable(false);
     	cId.setEditable(false);
-    	closeBtn = new Button("Close");
     	closeBtn.setActionCommand("Close");
     	closeBtn.addActionListener(new ButtonClickListener());
     	viewPanel.add(id);

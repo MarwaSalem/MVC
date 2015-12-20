@@ -1,15 +1,46 @@
 package view;
 
 import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+
+import model.*;
+import static helper.Constants.*;
 
 public class AllCustomersView {
 	
 	private Frame allCustomersInfoFrame;
-    public void  showAllCustomersWindow (String customers){
-    	allCustomersInfoFrame = new Frame();
-    	allCustomersInfoFrame.setSize(800,600);
+	private Button closeBtn;
+	
+	public AllCustomersView (){
+		allCustomersInfoFrame = new Frame();
+		closeBtn = new Button("Close");
+	}
+	
+	public void showEmptyDBWindow(){
+    	allCustomersInfoFrame.setSize(EMPTY_DB_VIEW_WIDTH,EMPTY_DB_VIEW_HEIGHT);
+    	allCustomersInfoFrame.setLayout(new FlowLayout());
+    	allCustomersInfoFrame.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent windowEvent){
+               allCustomersInfoFrame.setVisible(false);
+               allCustomersInfoFrame.dispose();
+            }        
+         }); 
+    	Panel viewPanel = new Panel(new FlowLayout());
+    	allCustomersInfoFrame.add(viewPanel);
+    	Label title = new Label("DB is empty !!",Label.CENTER);
+    	title.setFont(new Font("Serif", Font.BOLD, 32));
+    	viewPanel.add(title);
+    	closeBtn.setActionCommand("Close");
+    	closeBtn.addActionListener(new ButtonClickListener());
+    	viewPanel.add(closeBtn);
+    	allCustomersInfoFrame.setVisible(true);
+    }
+	
+    public void  showAllCustomersWindow (HashMap<String, CustomerModel> customersList){
+    	allCustomersInfoFrame.setSize(ALL_CUSTOMERS_VIEW_WIDTH,ALL_CUSTOMERS_VIEW_HEIGHT);
     	allCustomersInfoFrame.setLayout(new GridLayout(5, 2));
     	allCustomersInfoFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent windowEvent){
@@ -17,34 +48,54 @@ public class AllCustomersView {
                allCustomersInfoFrame.dispose();
             }        
          }); 
-    	
-    	String [] customersArray = customers.split("&");
-    	for (String customer : customersArray){
-    		Panel viewPanel = new Panel(new FlowLayout());
-        	allCustomersInfoFrame.add(viewPanel);
-    		String [] customerProperties = customer.split(";");
-        	Label title = new Label("Customer #" + customerProperties[0]);
-        	title.setFont(new Font("Serif", Font.BOLD, 20));
-        	viewPanel.add(title);
-    		Label firstName = new Label("First name", Label.LEFT);
-        	Label lastName = new Label("Last name", Label.LEFT);
-        	Label id = new Label("Id",Label.LEFT);
-        	TextField cFirstName = new TextField(customerProperties[1],34);
-        	TextField cLastName = new TextField(customerProperties[2],34);
-        	TextField cId = new TextField(customerProperties[0],20);
-        	cFirstName.setEditable(false);
-        	cLastName.setEditable(false);
-        	cId.setEditable(false);
-        	viewPanel.add(id);
-        	viewPanel.add(cId);
-        	viewPanel.add(firstName);
-        	viewPanel.add(cFirstName);
-        	viewPanel.add(lastName);
-        	viewPanel.add(cLastName);
-    	}
-    	//viewPanel.add(closeBtn);
+		Collection<CustomerModel> c = customersList.values();
+		Iterator<CustomerModel> itr = c.iterator();
+		while (itr.hasNext()) {
+			CustomerModel customer = itr.next();
+			addCustomerPanel(customer);
+		}
+		Panel closeBtnPanel = new Panel(new FlowLayout());
+		allCustomersInfoFrame.add(closeBtnPanel);
+		closeBtn.setActionCommand("Close");
+    	closeBtn.addActionListener(new ButtonClickListener());
+    	closeBtnPanel.add(closeBtn);
     	allCustomersInfoFrame.setVisible(true);
     	
+    }
+    
+    public void addCustomerPanel(CustomerModel customer){
+    	Panel viewPanel = new Panel(new FlowLayout());
+    	allCustomersInfoFrame.add(viewPanel);
+    	Label title = new Label("Customer #" + customer.getId());
+    	title.setFont(new Font("Serif", Font.BOLD, 20));
+    	viewPanel.add(title);
+		Label firstName = new Label("First name", Label.LEFT);
+    	Label lastName = new Label("Last name", Label.LEFT);
+    	Label id = new Label("Id",Label.LEFT);
+    	TextField cFirstName = new TextField(customer.getFirstName(),34);
+    	TextField cLastName = new TextField(customer.getLastName(),34);
+    	TextField cId = new TextField(customer.getId(),20);
+    	cFirstName.setEditable(false);
+    	cLastName.setEditable(false);
+    	cId.setEditable(false);
+    	viewPanel.add(id);
+    	viewPanel.add(cId);
+    	viewPanel.add(firstName);
+    	viewPanel.add(cFirstName);
+    	viewPanel.add(lastName);
+    	viewPanel.add(cLastName);
+    	
+    }
+    
+    private class ButtonClickListener implements ActionListener{
+    	public void actionPerformed(ActionEvent e){
+    		String command = e.getActionCommand();
+    		 if(command.equals("Close")){
+    			Component comp = ((Component) e.getSource()).getParent().getParent();
+    			System.out.println(comp);
+    			comp.setVisible(false); 
+    		}
+    	}    	
     }
     
     
