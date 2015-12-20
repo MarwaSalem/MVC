@@ -1,14 +1,16 @@
+package model;
 
-public class Customer {
+public class CustomerModel {
+	
 	private String  firstName;
 	private String lastName;
 	private String id;
 	
-	public Customer(String id){
+	public CustomerModel(String id){
 		this.id= id;
 	}
 	
-	public Customer(String id,String firstName , String lastName){
+	public CustomerModel(String id,String firstName , String lastName){
 		this.id =id;
 		this.firstName= firstName;
 		this.lastName = lastName;
@@ -41,5 +43,5 @@ public class Customer {
 	public String getCustomer(){
 		return id+";"+firstName+";"+lastName+";";
 	}
-	
+
 }
