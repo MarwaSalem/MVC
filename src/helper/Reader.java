@@ -18,6 +18,7 @@ public class Reader {
 	public HashMap<String,CustomerModel> retrieveDBCopy (){
 		String line = null; 
 		HashMap<String,CustomerModel>customersList = new HashMap<String, CustomerModel>();
+		dbString = "";
 		try{
 			FileReader fileReader = new FileReader(DB_FILE_NAME);
 			BufferedReader bufferedReader = new BufferedReader(fileReader);

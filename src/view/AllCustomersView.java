@@ -6,83 +6,100 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+
 import model.*;
 import static helper.Constants.*;
 
 public class AllCustomersView {
 	
-	private Frame allCustomersInfoFrame;
-	private Button closeBtn;
+	private JFrame allCustomersInfoFrame;
+	private JButton closeBtn;
+	private JTable customersTable;
+	private JScrollPane scroller;
+	private DefaultTableModel model;
 	
 	public AllCustomersView (){
-		allCustomersInfoFrame = new Frame();
-		closeBtn = new Button("Close");
+		initComponents();
 	}
-	
+	                         
+    private void initComponents() {
+    	allCustomersInfoFrame = new JFrame();
+		closeBtn = new JButton();
+        scroller = new JScrollPane();
+        customersTable = new JTable();
+        closeBtn = new JButton("Close");
+        closeBtn.setActionCommand("Close");
+
+        allCustomersInfoFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        allCustomersInfoFrame.setPreferredSize(new Dimension(ALL_CUSTOMERS_VIEW_WIDTH,ALL_CUSTOMERS_VIEW_HEIGHT));
+        allCustomersInfoFrame.setMaximumSize(new Dimension(ALL_CUSTOMERS_VIEW_WIDTH,ALL_CUSTOMERS_VIEW_HEIGHT));
+        allCustomersInfoFrame.setMinimumSize(new Dimension(ALL_CUSTOMERS_VIEW_WIDTH,ALL_CUSTOMERS_VIEW_HEIGHT));
+
+        customersTable.setFont(new Font("Tahoma", 1, 14)); 
+        model = new DefaultTableModel(
+                new Object [][] {
+                        {}
+                    },
+                    new String [] {
+                        "Id", "First name", "Last name"
+                    }
+                );
+        customersTable.setModel(model);
+        scroller.setViewportView(customersTable);
+
+        JLabel title = new JLabel("Customers List");
+        title.setFont(new java.awt.Font("Tahoma", 1, 14));
+       
+        GroupLayout layout = new GroupLayout(allCustomersInfoFrame.getContentPane());
+        allCustomersInfoFrame.getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(title)
+                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(20, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                    .addComponent(closeBtn)
+                    .addComponent(scroller,GroupLayout.PREFERRED_SIZE, 764,GroupLayout.PREFERRED_SIZE))
+                .addGap(20, 20, 20))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(title, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(scroller, GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE)
+                .addGap(27, 27, 27)
+                .addComponent(closeBtn)
+                .addContainerGap())
+        );
+
+    }  
 	public void showEmptyDBWindow(){
-    	allCustomersInfoFrame.setSize(EMPTY_DB_VIEW_WIDTH,EMPTY_DB_VIEW_HEIGHT);
-    	allCustomersInfoFrame.setLayout(new FlowLayout());
-    	allCustomersInfoFrame.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent windowEvent){
-               allCustomersInfoFrame.setVisible(false);
-               allCustomersInfoFrame.dispose();
-            }        
-         }); 
-    	Panel viewPanel = new Panel(new FlowLayout());
-    	allCustomersInfoFrame.add(viewPanel);
-    	Label title = new Label("DB is empty !!",Label.CENTER);
-    	title.setFont(new Font("Serif", Font.BOLD, 32));
-    	viewPanel.add(title);
-    	closeBtn.setActionCommand("Close");
-    	viewPanel.add(closeBtn);
-    	allCustomersInfoFrame.setVisible(true);
+    	warningMessageView.showErrorMessage("Empty Database !!");
     }
 	
     public void  showAllCustomersWindow (HashMap<String, CustomerModel> customersList){
-    	allCustomersInfoFrame.setSize(ALL_CUSTOMERS_VIEW_WIDTH,ALL_CUSTOMERS_VIEW_HEIGHT);
-    	allCustomersInfoFrame.setLayout(new GridLayout(5, 2));
-    	allCustomersInfoFrame.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent windowEvent){
-               allCustomersInfoFrame.setVisible(false);
-               allCustomersInfoFrame.dispose();
-            }        
-         }); 
+  
 		Collection<CustomerModel> c = customersList.values();
 		Iterator<CustomerModel> itr = c.iterator();
 		while (itr.hasNext()) {
 			CustomerModel customer = itr.next();
-			addCustomerPanel(customer);
+			addCustomerToTable(customer);
 		}
-		Panel closeBtnPanel = new Panel(new FlowLayout());
-		allCustomersInfoFrame.add(closeBtnPanel);
-		closeBtn.setActionCommand("Close");
-    	closeBtnPanel.add(closeBtn);
+		
     	allCustomersInfoFrame.setVisible(true);
     	
     }
     
-    public void addCustomerPanel(CustomerModel customer){
-    	Panel viewPanel = new Panel(new FlowLayout());
-    	allCustomersInfoFrame.add(viewPanel);
-    	Label title = new Label("Customer #" + customer.getId());
-    	title.setFont(new Font("Serif", Font.BOLD, 20));
-    	viewPanel.add(title);
-		Label firstName = new Label("First name", Label.LEFT);
-    	Label lastName = new Label("Last name", Label.LEFT);
-    	Label id = new Label("Id",Label.LEFT);
-    	TextField cFirstName = new TextField(customer.getFirstName(),34);
-    	TextField cLastName = new TextField(customer.getLastName(),34);
-    	TextField cId = new TextField(customer.getId(),20);
-    	cFirstName.setEditable(false);
-    	cLastName.setEditable(false);
-    	cId.setEditable(false);
-    	viewPanel.add(id);
-    	viewPanel.add(cId);
-    	viewPanel.add(firstName);
-    	viewPanel.add(cFirstName);
-    	viewPanel.add(lastName);
-    	viewPanel.add(cLastName);
-    	
+    private void addCustomerToTable(CustomerModel customer){
+        Object [] rowData = {customer.getId(),customer.getFirstName(),customer.getLastName()};
+        model.addRow(rowData);	
     }
     
     public void addActionObserver(ActionListener onClick) {

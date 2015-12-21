@@ -3,6 +3,7 @@ package controller;
 import model.*;
 import view.*;
 import helper.*;
+import static helper.Constants.*;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -73,11 +74,16 @@ public class CustomerController {
 	}
 	private void submitNewCustomer(){
 		// to be modified
-		String customer = newCustomerView.getDataEntries();
-		addNewCustomer(customer);
-		dbNewEntries +=customer;
-		System.out.println("Submit new Customer Data:" + customer);
-		newCustomerView.onSubmit();
+		if (newCustomerView.verify()){
+			String customer = newCustomerView.getDataEntries();
+			addNewCustomer(customer);
+			dbNewEntries += NEW_ENTRY_SEPARATOR+customer;
+			System.out.println("Submit new Customer Data:" + customer);
+			newCustomerView.onSubmit();
+		}else{
+			warningMessageView.showErrorMessage("ID field can't be empty");
+		}
+		
 		
 	}
 	
