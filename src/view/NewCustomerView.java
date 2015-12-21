@@ -16,7 +16,7 @@ public class NewCustomerView {
 		submitBtn =  new Button("Submit");
 	}
 	
-	public void showAddNewCustomerWindow (){
+	public  void showAddNewCustomerWindow (){
     	newCustomerFrame.setSize(NEW_CUSTOMER_VIEW_WIDTH, NEW_CUSTOMER_VIEW_HEIGHT);
     	newCustomerFrame.setLayout(new GridLayout(5, 2));
     	newCustomerFrame.addWindowListener(new WindowAdapter() {
@@ -42,7 +42,6 @@ public class NewCustomerView {
     	entriesPanel.add(cFirstName);
     	entriesPanel.add(lastName);
     	entriesPanel.add(cLastName);
-    	submitBtn.setBounds(newCustomerFrame.getWidth()/2-20, newCustomerFrame.getHeight()/2-10, 20, 10);
     	submitBtn.setActionCommand("Submit");
     	entriesPanel.add(submitBtn);
     	newCustomerFrame.setVisible(true);

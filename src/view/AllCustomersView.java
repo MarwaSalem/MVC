@@ -34,7 +34,6 @@ public class AllCustomersView {
     	title.setFont(new Font("Serif", Font.BOLD, 32));
     	viewPanel.add(title);
     	closeBtn.setActionCommand("Close");
-    	closeBtn.addActionListener(new ButtonClickListener());
     	viewPanel.add(closeBtn);
     	allCustomersInfoFrame.setVisible(true);
     }
@@ -57,7 +56,6 @@ public class AllCustomersView {
 		Panel closeBtnPanel = new Panel(new FlowLayout());
 		allCustomersInfoFrame.add(closeBtnPanel);
 		closeBtn.setActionCommand("Close");
-    	closeBtn.addActionListener(new ButtonClickListener());
     	closeBtnPanel.add(closeBtn);
     	allCustomersInfoFrame.setVisible(true);
     	
@@ -87,16 +85,9 @@ public class AllCustomersView {
     	
     }
     
-    private class ButtonClickListener implements ActionListener{
-    	public void actionPerformed(ActionEvent e){
-    		String command = e.getActionCommand();
-    		 if(command.equals("Close")){
-    			Component comp = ((Component) e.getSource()).getParent().getParent();
-    			System.out.println(comp);
-    			comp.setVisible(false); 
-    		}
-    	}    	
-    }
+    public void addActionObserver(ActionListener onClick) {
+		 closeBtn.addActionListener(onClick);
+	}
     
     
 	

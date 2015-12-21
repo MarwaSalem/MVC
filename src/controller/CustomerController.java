@@ -4,6 +4,7 @@ import model.*;
 import view.*;
 import helper.*;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Collection;
@@ -12,7 +13,7 @@ import java.util.Iterator;
 
 public class CustomerController {
 	private MainView mainView;
-	private NewCustomerView newCustomerView;
+	public static  NewCustomerView newCustomerView;
 	private AllCustomersView allCustomersView;
 	private Reader reader;
 	private Writer writer;
@@ -22,7 +23,6 @@ public class CustomerController {
 		mainView = new MainView();
 		newCustomerView = new NewCustomerView();
 		allCustomersView = new AllCustomersView();
-		mainView.viewMainFrame();
 		reader = new Reader();
 		writer = new Writer();
 	}
@@ -30,7 +30,9 @@ public class CustomerController {
 	public void initCustomerController() {
 		mainView.addActionObserver(new ButtonClickListener());
 		newCustomerView.addActionObserver(new ButtonClickListener());
+		allCustomersView.addActionObserver(new ButtonClickListener());
 		customersList = reader.retrieveDBCopy();
+		mainView.viewMainFrame();
 	}
 
 	public void addNewCustomer(String customer) {
@@ -62,6 +64,7 @@ public class CustomerController {
 	public class ButtonClickListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			String command = e.getActionCommand();
+			System.out.println("Button clicked: " + command);
 			if (command.equals("ViewAll")) {
 				System.out.println("view all customers");
 				if (customersList.isEmpty()) {
@@ -74,7 +77,17 @@ public class CustomerController {
 				addNewCustomer(customer);
 				System.out.println("Submit new Customer Data:" + customer);
 				newCustomerView.onSubmit();
-			}
+			}else if (command.equals("Add")){
+    			System.out.println("add new customer");
+    			newCustomerView.showAddNewCustomerWindow();
+    		}else if(command.equals("View")) {
+    			System.out.println("view Customer");  
+    			//showCustomerInfoWindow(controller.getCustomerInfo(id));
+    		}else  if(command.equals("Close")){
+    			Component comp = ((Component) e.getSource()).getParent().getParent();
+    			System.out.println(comp);
+    			comp.setVisible(false); 
+    		}
 		}
 	}
 
