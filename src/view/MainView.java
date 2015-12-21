@@ -11,6 +11,8 @@ public class MainView {
  	private Button viewAllBtn;
  	private Button addNewCustomerBtn;
  	private Button getCustomerInfoBtn;
+ 	private Button dbSyncBtn;
+ 	private Button closeBtn;
  	
  	public MainView() {
  		mainFrame = new Frame("MVC Example");
@@ -18,6 +20,8 @@ public class MainView {
  		viewAllBtn = new Button("View all Customers");
  		addNewCustomerBtn = new Button("Add Customer");
     	getCustomerInfoBtn = new Button("Get Customer Info");
+    	dbSyncBtn = new Button("Sync with DB");
+    	closeBtn = new Button("Close");
  	}
  	
 	public void viewMainFrame(){
@@ -33,13 +37,17 @@ public class MainView {
     	Font headerFont = new Font("Serif",Font.BOLD,32);
     	header.setFont(headerFont);
     	mainFrame.add(controlPanel);
-    	
+ 
     	addNewCustomerBtn.setActionCommand("Add");
     	getCustomerInfoBtn.setActionCommand("View");
     	viewAllBtn.setActionCommand("ViewAll");
+    	dbSyncBtn.setActionCommand("Sync");
+    	closeBtn.setActionCommand("Close");
     	controlPanel.add(addNewCustomerBtn);
     	controlPanel.add(getCustomerInfoBtn);
     	controlPanel.add(viewAllBtn);
+    	controlPanel.add(dbSyncBtn);
+    	controlPanel.add(closeBtn);
     	mainFrame.setVisible(true);
 	    	
 	    }
@@ -49,6 +57,8 @@ public class MainView {
 		 viewAllBtn.addActionListener(onClick);
 		 addNewCustomerBtn.addActionListener(onClick);
 	     getCustomerInfoBtn.addActionListener(onClick);
+	     dbSyncBtn.addActionListener(onClick);
+	     closeBtn.addActionListener(onClick);
 	}
 	
 	

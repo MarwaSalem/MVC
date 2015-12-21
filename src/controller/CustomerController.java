@@ -13,11 +13,12 @@ import java.util.Iterator;
 
 public class CustomerController {
 	private MainView mainView;
-	public static  NewCustomerView newCustomerView;
+	private  NewCustomerView newCustomerView;
 	private AllCustomersView allCustomersView;
 	private Reader reader;
 	private Writer writer;
 	private HashMap<String, CustomerModel> customersList;
+	private String dbNewEntries;
 
 	public CustomerController() {
 		mainView = new MainView();
@@ -25,6 +26,7 @@ public class CustomerController {
 		allCustomersView = new AllCustomersView();
 		reader = new Reader();
 		writer = new Writer();
+		dbNewEntries = "";
 	}
 
 	public void initCustomerController() {
@@ -60,34 +62,61 @@ public class CustomerController {
 		System.out.println(customers);
 		return customers;
 	}
+	
+	
+	private void viewAllCustomers (){
+		if (customersList.isEmpty()) {
+			allCustomersView.showEmptyDBWindow();
+		} else {
+			allCustomersView.showAllCustomersWindow(customersList);
+		}
+	}
+	private void submitNewCustomer(){
+		// to be modified
+		String customer = newCustomerView.getDataEntries();
+		addNewCustomer(customer);
+		dbNewEntries +=customer;
+		System.out.println("Submit new Customer Data:" + customer);
+		newCustomerView.onSubmit();
+		
+	}
+	
+	private void syncWithDB(){
+		String updatedDBEntries = reader.getdbString() + dbNewEntries;
+		writer.writeToDB(updatedDBEntries);
+		customersList = reader.retrieveDBCopy();
+	}
+	
+	private void closeCurrentWindow(Component component){
+		Component parentWindow = component.getParent().getParent();
+		parentWindow.setVisible(false);
+	}
 
 	public class ButtonClickListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			String command = e.getActionCommand();
-			System.out.println("Button clicked: " + command);
-			if (command.equals("ViewAll")) {
-				System.out.println("view all customers");
-				if (customersList.isEmpty()) {
-					allCustomersView.showEmptyDBWindow();
-				} else {
-					allCustomersView.showAllCustomersWindow(customersList);
-				}
-			} else if (command.equals("Submit")) {
-				String customer = newCustomerView.getDataEntries();
-				addNewCustomer(customer);
-				System.out.println("Submit new Customer Data:" + customer);
-				newCustomerView.onSubmit();
-			}else if (command.equals("Add")){
-    			System.out.println("add new customer");
-    			newCustomerView.showAddNewCustomerWindow();
-    		}else if(command.equals("View")) {
-    			System.out.println("view Customer");  
-    			//showCustomerInfoWindow(controller.getCustomerInfo(id));
-    		}else  if(command.equals("Close")){
-    			Component comp = ((Component) e.getSource()).getParent().getParent();
-    			System.out.println(comp);
-    			comp.setVisible(false); 
-    		}
+	        switch (command){
+		        case "Add":
+		        	newCustomerView.showAddNewCustomerWindow();
+		        	break;
+		        case "ViewAll":
+		        	viewAllCustomers();
+		        	break;
+		        case "Submit":
+		        	submitNewCustomer();
+		        	break;
+		        case "View":
+		        	System.out.println("view Customer");  
+	    			//showCustomerInfoWindow(controller.getCustomerInfo(id));
+		        	break;
+		        case "Sync" :
+		        	syncWithDB();
+		        case "Close":
+		        	closeCurrentWindow((Component) e.getSource());
+		        	break;
+		        default:
+	        		System.out.println("Invalid Buttom Click Action Command !");
+	        }
 		}
 	}
 

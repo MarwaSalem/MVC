@@ -9,7 +9,7 @@ public class Constants {
 	public static final int CUSTOMER_INFO_VIEW_WIDTH = 600;
 	public static final int CUSTOMER_INFO_VIEW_HEIGHT = 400;
 	public static final int MAIN_VIEW_WIDTH = 600;
-	public static final int MAIN_VIEW_HEIGHT = 300;
+	public static final int MAIN_VIEW_HEIGHT = 600;
 	public static final int NEW_CUSTOMER_VIEW_WIDTH = 600;
 	public static final int NEW_CUSTOMER_VIEW_HEIGHT = 400; 
 	

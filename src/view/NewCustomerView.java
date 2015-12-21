@@ -65,20 +65,6 @@ public class NewCustomerView {
     	newCustomerFrame.dispose();
     }
 	
-//	private class ButtonClickListener implements ActionListener{
-//    	public void actionPerformed(ActionEvent e){
-//    		String command = e.getActionCommand();
-//    		if (command.equals("Submit")){
-//    			System.out.println("submit new customer");
-//    			
-//    		}else  if(command.equals("Close")){
-//    			Component comp = ((Component) e.getSource()).getParent().getParent();
-//    			System.out.println(comp);
-//    			comp.setVisible(false); 
-//    		}
-//    	}    	
-//    }
-	
 	public void addActionObserver(ActionListener onClick) {
 		submitBtn.addActionListener(onClick);
 	}

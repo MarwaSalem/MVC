@@ -7,16 +7,11 @@ import java.io.*;
 public class Writer {
 	
 	
-	public void writeToDB(){
+	public void writeToDB(String updatedDBEntries){
 		try {
 			FileWriter fileWriter = new FileWriter(DB_FILE_NAME);
 			BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-			bufferedWriter.write("Hello There");
-			bufferedWriter.write(" here is some text.");
-            bufferedWriter.newLine();
-            bufferedWriter.write("We are writing");
-            bufferedWriter.write(" the text to the file.");
-            
+			bufferedWriter.write(updatedDBEntries);    
             bufferedWriter.close();
 		} catch (IOException e) {
 			System.out.println("Error writing to a file !");

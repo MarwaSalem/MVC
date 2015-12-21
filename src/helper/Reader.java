@@ -9,6 +9,12 @@ import model.*;
 
 public class Reader {
 	
+	private String dbString;
+	
+	public Reader(){
+		dbString = "";
+	}
+	
 	public HashMap<String,CustomerModel> retrieveDBCopy (){
 		String line = null; 
 		HashMap<String,CustomerModel>customersList = new HashMap<String, CustomerModel>();
@@ -16,6 +22,7 @@ public class Reader {
 			FileReader fileReader = new FileReader(DB_FILE_NAME);
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
 			while((line = bufferedReader.readLine()) != null){
+				dbString += line;
 				System.out.println(line);
 				String[] customers =line.split("&");
 				for (String customer : customers){
@@ -36,6 +43,10 @@ public class Reader {
 			e.printStackTrace();
 		}
 		return customersList;
+	}
+	
+	public String getdbString (){
+		return dbString;
 	}
 	
 }
