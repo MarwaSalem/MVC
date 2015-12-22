@@ -5,6 +5,7 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
+import model.Customer;
 import static helper.Constants.*;
 
 public class NewCustomerView {
@@ -12,6 +13,9 @@ public class NewCustomerView {
 	private JPanel entriesPanel;
 	private JButton submitBtn;
 	private JTextField customerId;
+	private JTextField customerFirstName;
+	private JTextField customerLastName;
+	
 	public NewCustomerView(){
 		initComponents();
 	}
@@ -30,10 +34,15 @@ public class NewCustomerView {
         JLabel lastName = new JLabel("Last name");
 
         customerId = new JTextField();
-        JTextField customerFirstName = new JTextField();
-        JTextField customerLastName = new JTextField();
+        customerFirstName = new JTextField();
+        customerLastName = new JTextField();
     
-        newCustomerFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        newCustomerFrame.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent windowEvent){
+               newCustomerFrame.setVisible(false);
+               newCustomerFrame.dispose();
+            }        
+        });
         header.setFont(new Font("Tahoma", 1, 14)); 
         
         GroupLayout layoutPanel = new GroupLayout(entriesPanel);
@@ -101,18 +110,8 @@ public class NewCustomerView {
                 .addComponent(entriesPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
-        
-    	newCustomerFrame.add(header);
-    	newCustomerFrame.add(entriesPanel);
-    
-//    	entriesPanel.add(id);
-//    	entriesPanel.add(customerId);
-//    	entriesPanel.add(firstName);
-//    	entriesPanel.add(customerFirstName);
-//    	entriesPanel.add(lastName);
-//    	entriesPanel.add(cLastName);
     	submitBtn.setActionCommand("Submit");
-    	//entriesPanel.add(submitBtn);
+
     }
 	
 	public boolean verify(){
@@ -129,15 +128,9 @@ public class NewCustomerView {
     	  	
     }
 	
-	public String getDataEntries(){
-		Component [] components = entriesPanel.getComponents();
-		String properties="";
-		for (Component comp : components){
-			if (comp instanceof TextField){
-				properties += ((TextField) comp).getText()+";";
-			}
-		}
-		return properties;
+	public Customer getCustomer(){
+		Customer customer = new Customer(customerId.getText(),customerFirstName.getText(),customerLastName.getText());
+		return customer;
    }
 	
 	

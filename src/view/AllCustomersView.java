@@ -31,8 +31,12 @@ public class AllCustomersView {
         customersTable = new JTable();
         closeBtn = new JButton("Close");
         closeBtn.setActionCommand("Close");
-
-        allCustomersInfoFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        allCustomersInfoFrame.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent windowEvent){
+                allCustomersInfoFrame.setVisible(false);
+                allCustomersInfoFrame.dispose();
+             }        
+        });
         allCustomersInfoFrame.setPreferredSize(new Dimension(ALL_CUSTOMERS_VIEW_WIDTH,ALL_CUSTOMERS_VIEW_HEIGHT));
         allCustomersInfoFrame.setMaximumSize(new Dimension(ALL_CUSTOMERS_VIEW_WIDTH,ALL_CUSTOMERS_VIEW_HEIGHT));
         allCustomersInfoFrame.setMinimumSize(new Dimension(ALL_CUSTOMERS_VIEW_WIDTH,ALL_CUSTOMERS_VIEW_HEIGHT));
@@ -84,12 +88,12 @@ public class AllCustomersView {
     	warningMessageView.showErrorMessage("Empty Database !!");
     }
 	
-    public void  showAllCustomersWindow (HashMap<String, CustomerModel> customersList){
+    public void  showAllCustomersWindow (HashMap<String, Customer> customersList){
   
-		Collection<CustomerModel> c = customersList.values();
-		Iterator<CustomerModel> itr = c.iterator();
+		Collection<Customer> c = customersList.values();
+		Iterator<Customer> itr = c.iterator();
 		while (itr.hasNext()) {
-			CustomerModel customer = itr.next();
+			Customer customer = itr.next();
 			addCustomerToTable(customer);
 		}
 		
@@ -97,7 +101,7 @@ public class AllCustomersView {
     	
     }
     
-    private void addCustomerToTable(CustomerModel customer){
+    private void addCustomerToTable(Customer customer){
         Object [] rowData = {customer.getId(),customer.getFirstName(),customer.getLastName()};
         model.addRow(rowData);	
     }

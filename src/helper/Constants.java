@@ -17,6 +17,8 @@ public class Constants {
 	public static final String DB_FILE_NAME = "db.txt";
 	public static final String PROPERTY_SEPARATOR = ";";
 	public static final String NEW_ENTRY_SEPARATOR = "&";
+	public static final String EMPTY_ID_WARNING_MESSAGE = "ID field can't be left empty";
+	public static final String EXISTING_ID_WARNING_MESSAGE ="ID already exists !!";
 	
 	
 }

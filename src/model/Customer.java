@@ -1,16 +1,16 @@
 package model;
 
-public class CustomerModel {
+public class Customer {
 	
 	private String  firstName;
 	private String lastName;
 	private String id;
 	
-	public CustomerModel(String id){
+	public Customer(String id){
 		this.id= id;
 	}
 	
-	public CustomerModel(String id,String firstName , String lastName){
+	public Customer(String id,String firstName , String lastName){
 		this.id =id;
 		this.firstName= firstName;
 		this.lastName = lastName;
