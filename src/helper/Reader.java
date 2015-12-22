@@ -12,21 +12,21 @@ import model.Customer;
 
 public class Reader {
 
-	private String dbString;
+	private StringBuilder dbString;
 
 	public Reader() {
-		dbString = "";
+		dbString = new StringBuilder();
 	}
 
 	public HashMap<String, Customer> retrieveDBCopy() {
 		String line = null;
 		HashMap<String, Customer> customersList = new HashMap<String, Customer>();
-		dbString = "";
+		dbString.delete(0, dbString.length());
 		try {
 			FileReader fileReader = new FileReader(DB_FILE_NAME);
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
 			while ((line = bufferedReader.readLine()) != null) {
-				dbString += line;
+				dbString.append(line);
 				System.out.println(line);
 				String[] customers = line.split("&");
 				for (String customer : customers) {
@@ -49,7 +49,7 @@ public class Reader {
 		return customersList;
 	}
 
-	public String getdbString() {
+	public StringBuilder getdbString() {
 		return dbString;
 	}
 

@@ -9,9 +9,7 @@ import helper.Writer;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
@@ -29,7 +27,7 @@ public class CustomerController {
 	private Reader reader;
 	private Writer writer;
 	private HashMap<String, Customer> customersList;
-	private String dbNewEntries;
+	private StringBuilder dbNewEntries;
 
 	public CustomerController() {
 		mainView = new MainView();
@@ -37,7 +35,7 @@ public class CustomerController {
 		allCustomersView = new AllCustomersView();
 		reader = new Reader();
 		writer = new Writer();
-		dbNewEntries = "";
+		dbNewEntries = new StringBuilder();
 	}
 
 	public void initCustomerController() {
@@ -61,28 +59,23 @@ public class CustomerController {
 		addToDBEntryList(customer);
 	}
 
+	private String modify(String string) {
+		if (string.equals("")) {
+			return "-";
+		}
+		return string;
+	}
+
 	public void addToDBEntryList(Customer customer) {
-		dbNewEntries += NEW_ENTRY_SEPARATOR + customer.getId() + ";"
-				+ customer.getFirstName() + ";" + customer.getLastName() + ";";
+		dbNewEntries.append(NEW_ENTRY_SEPARATOR + customer.getId() + ";"
+				+ modify(customer.getFirstName()) + ";"
+				+ modify(customer.getLastName()) + ";");
 	}
 
 	public String getCustomerInfo(String id) {
 		Customer customer = customersList.get(id);
 		return customer.getId() + ";" + customer.getFirstName() + ";"
 				+ customer.getLastName() + ";";
-	}
-
-	public String getAllCustomersInfo() {
-		String customers = "";
-		Collection<Customer> c = customersList.values();
-		Iterator<Customer> itr = c.iterator();
-		while (itr.hasNext()) {
-			Customer customer = (Customer) itr.next();
-			customers += customer.getCustomer() + "&";
-		}
-
-		System.out.println(customers);
-		return customers;
 	}
 
 	private void viewAllCustomers() {
@@ -94,7 +87,7 @@ public class CustomerController {
 	}
 
 	private void submitNewCustomer() {
-		if (newCustomerView.verify()) {
+		if (newCustomerView.verifyNotEmpty()) {
 			addNewCustomer();
 		} else {
 			warningMessageView.showErrorMessage(EMPTY_ID_WARNING_MESSAGE);
@@ -102,9 +95,9 @@ public class CustomerController {
 	}
 
 	private void syncWithDB() {
-		String updatedDBEntries = reader.getdbString() + dbNewEntries;
-		writer.writeToDB(updatedDBEntries);
-		customersList = reader.retrieveDBCopy();
+		StringBuilder updatedDBEntries = reader.getdbString().append(
+				dbNewEntries);
+		writer.writeToDB(updatedDBEntries.toString());
 	}
 
 	private void closeCurrentWindow(Component component) {
@@ -132,6 +125,7 @@ public class CustomerController {
 				break;
 			case "Sync":
 				syncWithDB();
+				break;
 			case "Close":
 				closeCurrentWindow((Component) e.getSource());
 				break;
